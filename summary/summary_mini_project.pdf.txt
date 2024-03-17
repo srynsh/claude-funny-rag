@@ -1,0 +1,9 @@
+The document "BOUNDING COP NUMBER OF A GRAPH USING A NEW PARAMETER" by Suryaansh Jain and Kartheek S Tammana, under the advisorship of Professor Subrahmanyam Kalyanasundaram, explores a new bound for the cop number of a graph using a minimal subset U of vertices.
+
+The authors introduce the game of Cops and Robbers, played on an undirected reflexive graph, where cops and a robber move along the graph's edges, with the cops winning if they occupy the same vertex as the robber. The cop number of a graph is the minimum number of cops required to guarantee a win.
+
+The authors present their main result, showing that the cop number of a graph G is bounded by |U|/3 + 9, where U is a minimal subset of vertices such that any component of G\U has at most 2 vertices. They conjecture that this could be generalized to components of size at most k, with the cop number bounded by |U|/3 + f(k) for some function f that grows with k.
+
+The proof involves three reduction rules that remove vertices from U and add cops to the graph. The authors then analyze the reduced graph G' and show that 7 additional cops can force the robber into a zigzag motion. By considering a retraction of the remaining graph, they prove the final bound on the cop number.
+
+The document also discusses other attempts made by the authors, including exploring parametrized algorithms, extending the concept of dismantlable graphs, and attempting to disprove bounds of the form c(G) ≤ |U|/3 + k.
