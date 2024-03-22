@@ -22,8 +22,6 @@ def summarize_documents():
                     summaries.append(summary)
                 continue
 
-
-            
             with open(pdf_path, 'rb') as file:
                 reader = PdfReader(file)
                 number_of_pages = len(reader.pages)
@@ -50,15 +48,14 @@ def summarize_documents():
                 with open(f"./summary/summary_{filename}.txt", "w") as file:
                     file.write(res[0].text)
 
-    # print(summaries)
-
     return summaries
 
 def create_context(rel_index, file_names):
     context = ""
+    print(rel_index)
+    print(file_names)
     for index in rel_index:
         file_name = file_names[index]
-        print(file_name)
         with open(file_name, 'rb') as file:
             reader = PdfReader(file)
             number_of_pages = len(reader.pages)
@@ -70,10 +67,12 @@ def create_context(rel_index, file_names):
 
 summaries = summarize_documents()
 messages = []
-print(file_names)
 
 while True:
     query = input("Ask a question: ")
+    if query == "no":
+        break
+
     messages.append(
         {
             "role": "user",
@@ -97,7 +96,7 @@ while True:
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Find the indices of the top 5 most relevant summaries for this question: {query}. Only output the list of (index, score) and no other text, only the list with no other english words."
+                        "text": f"Find the indices of the top 5 most relevant summaries for this question: {query}. Only output the list of (index, score) with 0 indexing and no other text, only the list with no other english words."
                     }
                 ]
             }
@@ -107,9 +106,7 @@ while True:
     res = message.content
     res = res[0].text
 
-    # read the string as a list of tuples
     res = eval(res)
-    print(res)
 
     best_indices = []
 
@@ -117,15 +114,15 @@ while True:
         if score > 0.1:
             best_indices.append(index)
 
-    best_context = create_context(best_indices, file_names)
+    print(best_indices)
 
-    # exit()
+    best_context = create_context(best_indices, file_names)
 
     message = client.messages.create(
         model="claude-3-opus-20240229",
         max_tokens=1000,
         temperature=0,
-        system=f"This is some relevent context: {best_context}. Answer the questions based on this context.",
+        system=f"This is some relevent context: {best_context}. Answer the questions based on this context. If you fell that the context is not relevent then ignore it. If there is any issue then return an empty list but never any other text.",
         messages=messages
     )
 
